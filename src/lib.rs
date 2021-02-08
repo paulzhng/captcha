@@ -67,11 +67,12 @@ use fonts::{Default, Font};
 use images::{Image, Pixl};
 
 use rand::thread_rng;
-use image::ImageResult as Result;
+use image::{ImageResult as Result, Rgb};
 use rand::prelude::*;
 use std::cmp::{max, min};
 use std::path::Path;
 use audio::Audio;
+use image::buffer::Pixels;
 
 /// Represents the area which contains text in a CAPTCHA.
 #[derive(Clone, Debug)]
@@ -311,6 +312,11 @@ impl Captcha {
             Some(vec) => Some(base64::encode(vec)),
             None => None
         }
+    }
+
+    pub fn as_bitmap(&self) -> Pixels<Rgb<u8>> {
+        let i = self.apply_transformations();
+        i.pixels()
     }
 
     /// Returns a tuple which contains the characters that have been added to this CAPTCHA

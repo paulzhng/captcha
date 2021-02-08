@@ -4,6 +4,7 @@ use std::path::Path;
 
 use image::{load_from_memory, ImageBuffer, Rgb, RgbImage};
 use lodepng;
+use image::buffer::Pixels;
 
 #[derive(Clone, Copy)]
 pub struct Pixl {
@@ -77,6 +78,10 @@ impl Image {
         Pixl {
             rgb: [p[0], p[1], p[2]],
         }
+    }
+
+    pub fn pixels(&self) -> Pixels<Rgb<u8>> {
+        self.img.pixels()
     }
 
     pub fn width(&self) -> u32 {
