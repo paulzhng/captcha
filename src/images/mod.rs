@@ -4,11 +4,24 @@ use std::path::Path;
 
 use image::{load_from_memory, ImageBuffer, Rgb, RgbImage};
 use lodepng;
-use image::buffer::Pixels;
 
 #[derive(Clone, Copy)]
 pub struct Pixl {
     rgb: [u8; 3],
+}
+
+impl From<Rgb<u8>> for Pixl {
+    fn from(p: Rgb<u8>) -> Self {
+        Self {
+            rgb: [p[0], p[1], p[2]]
+        }
+    }
+}
+
+impl From<Pixl> for Rgb<u8> {
+    fn from(p: Pixl) -> Self {
+        Rgb::from(p.rgb)
+    }
 }
 
 #[derive(Clone)]
@@ -75,13 +88,16 @@ impl Image {
 
     pub fn get_pixel(&self, x: u32, y: u32) -> Pixl {
         let p = self.img.get_pixel(x, y).clone();
-        Pixl {
-            rgb: [p[0], p[1], p[2]],
-        }
+        Pixl::from(p)
     }
 
-    pub fn pixels(&self) -> Pixels<Rgb<u8>> {
-        self.img.pixels()
+    pub fn pixels(self) -> Vec<Pixl> {
+        let mut pixels = Vec::new();
+        for p in self.img.pixels().clone() {
+            pixels.push(Pixl::from(*p));
+        }
+
+        pixels
     }
 
     pub fn width(&self) -> u32 {

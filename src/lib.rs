@@ -314,7 +314,7 @@ impl Captcha {
         }
     }
 
-    pub fn as_bitmap(&self) -> Pixels<Rgb<u8>> {
+    pub fn as_bitmap(&self) -> Vec<Pixl> {
         let i = self.apply_transformations();
         i.pixels()
     }
@@ -338,11 +338,11 @@ impl Captcha {
 
 #[cfg(test)]
 mod tests {
+    use std::path::Path;
+
+    use Captcha;
     use filters::{Grid, Noise};
     use fonts::Default;
-    use Captcha;
-
-    use std::path::Path;
 
     #[test]
     fn it_works() {
