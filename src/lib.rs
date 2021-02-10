@@ -49,6 +49,7 @@
 
 extern crate base64;
 extern crate image;
+#[cfg(feature = "png")]
 extern crate lodepng;
 extern crate rand;
 extern crate serde_json;
@@ -300,6 +301,7 @@ impl Captcha {
     /// Returns the CAPTCHA as a png image.
     ///
     /// Returns `None` on error.
+    #[cfg(feature = "png")]
     pub fn as_png(&self) -> Option<Vec<u8>> {
         // TODO currently we always create a copy. For most use cases this might not be
         // necessary.
@@ -307,6 +309,7 @@ impl Captcha {
         i.as_png()
     }
 
+    #[cfg(feature = "png")]
     pub fn as_base64(&self) -> Option<String> {
         match self.as_png() {
             Some(vec) => Some(base64::encode(vec)),
@@ -323,6 +326,7 @@ impl Captcha {
     /// as a string and the image encoded as a PNG.
     ///
     /// Returns `None` on error.
+    #[cfg(feature = "png")]
     pub fn as_tuple(&self) -> Option<(String, Vec<u8>)> {
         match self.as_png() {
             None => None,
@@ -359,6 +363,8 @@ mod tests {
         c.extract(a)
             .save(Path::new("/tmp/captcha.png"))
             .expect("save failed");
+
+        #[cfg(feature = "png")]
         c.as_png().expect("no png");
     }
 
