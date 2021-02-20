@@ -53,12 +53,16 @@ extern crate image;
 extern crate lodepng;
 extern crate rand;
 extern crate serde_json;
+
+#[cfg(feature = "audio")]
 extern crate hound;
 
 pub mod filters;
 mod fonts;
 mod images;
 mod samples;
+
+#[cfg(feature = "audio")]
 mod audio;
 
 pub use samples::{by_name, gen, CaptchaName, Difficulty};
@@ -72,7 +76,6 @@ use image::{ImageResult as Result, Rgb};
 use rand::prelude::*;
 use std::cmp::{max, min};
 use std::path::Path;
-use audio::Audio;
 use image::buffer::Pixels;
 
 /// Represents the area which contains text in a CAPTCHA.
@@ -290,7 +293,10 @@ impl Captcha {
     /// Warning: Currently this feature is rather limited. The same audio data is returned
     /// for the same letter, i.e. no noise is added. Someone could solve the CAPTCHA by
     /// simply having the audio for each letter and comparing them with the current challenge.
+    #[cfg(feature = "audio")]
     pub fn as_wav(&self) -> Vec<Option<Vec<u8>>> {
+        use audio::Audio;
+
         let audio = Audio::new();
         self.chars()
             .iter()

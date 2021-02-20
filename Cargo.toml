@@ -13,14 +13,15 @@ repository = "https://github.com/daniel-e/captcha"
 
 [features]
 png = ["lodepng"]
+audio = ["hound"]
 
 [dependencies]
-image = "0.23"
+image = { version = "0.23", features = ["png"] }
 rand = "0.7"
 serde_json = "1.0"
 base64 = "0.13"
 lodepng = { version = "3.2", optional = true }
-hound = "3.4"
+hound = { version = "3.4", optional = true }
 
 [dev-dependencies]
 time = "0.2"
